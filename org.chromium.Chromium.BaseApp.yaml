@@ -79,14 +79,11 @@ modules:
       - -Dbuild-tests=false
     sources:
       - type: archive
-        url: https://download.gnome.org/sources/gtk/4.4/gtk-4.4.2.tar.xz
-        sha256: 08cdf45f655fe90318aba7d9e8008dda2ca4cb8db1b36197ca539ae25ce4719b
+        url: https://download.gnome.org/sources/gtk/4.6/gtk-4.6.1.tar.xz
+        sha256: d85508d21cbbcd63d568a7862af5ecd63b978d7d5799cbe404c91d2389d0ec5f
         x-checker-data:
           type: gnome
           name: gtk
-          versions:
-            # newer releases require libpango>=1.49
-            <: 4.6.0
           stable-only: true
       - type: shell
         commands:
@@ -119,6 +116,25 @@ modules:
           - /include
           - /lib/graphene-1.0
           - /lib/pkgconfig
+      - name: pango
+        config-opts:
+          - --buildtype=release
+          - -Dgtk_doc=false
+          - -Dintrospection=disabled
+        buildsystem: meson
+        sources:
+          - type: archive
+            url: https://download.gnome.org/sources/pango/1.50/pango-1.50.5.tar.xz
+            sha256: 6d136872da6207fe88c5cd2c95c36bcaf4ed29402b854663a86cd7efe99b0cf5
+            x-checker-data:
+              type: gnome
+              name: pango
+              stable-only: true
+        cleanup:
+          - /bin
+          - /include
+          - /lib/pkgconfig
+          - /share/man
 
   - name: fcitx5-gtk
     buildsystem: cmake-ninja
