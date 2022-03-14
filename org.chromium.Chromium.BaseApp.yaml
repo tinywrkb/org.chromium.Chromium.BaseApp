@@ -182,6 +182,8 @@ modules:
       - --disable-gtk-doc
       - --disable-memconf
       - --disable-dconf
+      - --disable-systemd-services
+      - --disable-systemd
       - --disable-python2
       - --disable-setup
       - --with-python=python3
@@ -197,21 +199,32 @@ modules:
       - --with-gtk4-im-module-dir=${FLATPAK_DEST}/lib/gtkmodules/4.0.0/immodules
     sources:
       - type: archive
-        url: https://github.com/ibus/ibus/releases/download/1.5.25/ibus-1.5.25.tar.gz
-        sha256: dea4f663c485267cc3313e40a0bc89b977c397e19644f8ab41df0e6eaec34330
+        url: https://github.com/ibus/ibus/releases/download/1.5.26/ibus-1.5.26.tar.gz
+        sha256: 5c2fd118e7bfd4e9a42c3a20e6175a263426c90b6256f94989ed3d0384f4c9fc
         x-checker-data:
           type: anitya
           project-id: 1352
           stable-only: true
           url-template: https://github.com/ibus/ibus/releases/download/$version/ibus-$version.tar.gz
-      - type: shell
-        commands:
-          - sed '/^AM_CONDITIONAL.*ENABLE_DAEMON/ s/true/false/' -i configure.ac
-          - sed '/^SUBDIRS/,/$(NULL)/ s/data\|docs\|ibus\|portal\|tools\|util//' -i Makefile.am
+      # alternative for cleanup, only build libibus and im module
+      #- type: shell
+      #  commands:
+      #    - sed '/^AM_CONDITIONAL.*ENABLE_DAEMON/ s/true/false/' -i configure.ac
+      #    - sed '/^SUBDIRS/,/$(NULL)/ s/data\|docs\|ibus\|portal\|tools\|util//' -i
+      #      Makefile.am
     cleanup:
+      - /bin
       - /include
       - /lib/pkgconfig
-      - /share
+      - /libexec
+      # keep /share/locale
+      - /share/bash-completion
+      - /share/dbus-1
+      - /share/gettext
+      - /share/gtk-doc
+      - /share/ibus
+      - /share/icons
+      - /share/man
       - '*.la'
 
   - name: krb5
